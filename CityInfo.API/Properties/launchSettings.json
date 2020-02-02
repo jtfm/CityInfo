@@ -10,9 +10,10 @@
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Development"
+        //"connectionStrings:cityInfoDBConnectionString": "Server=myproductionserver;Database=CityInfoDB;UserId=CertainlyNotSA;Password=CertainlyNotSA;"
       }
     },
     "CityInfo.API": {

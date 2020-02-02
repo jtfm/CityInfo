@@ -1,4 +1,7 @@
+using CityInfo.API.Contexts;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog.Web;
 using System;
@@ -14,7 +17,24 @@ namespace CityInfo.API
             try
             {
                 logger.Info("Initialising application...");
-                CreateHostBuilder(args).Build().Run();
+                var host = CreateHostBuilder(args).Build();
+                using(var scope = host.Services.CreateScope())
+                {
+                    try
+                    {
+                        var context = scope.ServiceProvider.GetService<CityInfoContext>();
+
+                        // for demo purposes, delete the database & migrate on startup so
+                        // we can start with a clean slate
+                        context.Database.EnsureDeleted();
+                        context.Database.Migrate();
+                    }
+                    catch(Exception e)
+                    {
+                        logger.Error(e, "An error occurred while migrating the database.");
+                    }
+                }
+                host.Run();
             }
             catch (Exception e)
             {
